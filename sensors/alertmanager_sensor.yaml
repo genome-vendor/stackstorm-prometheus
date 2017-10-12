@@ -1,0 +1,17 @@
+---
+class_name: AlertmanagerSensor
+entry_point: alertmanager_sensor.py
+description: "Receives information about new alerts from Alertmanager and creates triggers"
+trigger_types:
+  -
+    name: "prometheus.alert"
+    description: "Represents a single alert from Prometheus/Alertmanager"
+    payload_schema:
+      type: "object"
+      properties:
+        alert_name:
+          type: "string"
+        host:
+          type: "string"
+        service:
+          type: "string"
