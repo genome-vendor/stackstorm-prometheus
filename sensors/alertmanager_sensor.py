@@ -27,7 +27,7 @@ class AlertmanagerSensor(Sensor):
           d = json.loads(s)
           labels = d['alerts'][0]['labels']
 
-          trigger = 'default.prometheus.alert'
+          trigger = 'prometheus.alert'
           payload = {
             'alert_name': labels['alertname'],
             'host': labels['host']
