@@ -30,11 +30,13 @@ class AlertmanagerSensor(Sensor):
           trigger = 'prometheus.alert'
           payload = {
             'alert_name': labels['alertname'],
-            'host': labels['host']
+            'host': labels['instance']
           }
           self._sensor.sensor_service.dispatch(trigger=trigger, payload=payload)
 
           self.send_response(200)
+          self.send_header("Content-type", "application/json")
+          self.end_headers()
         except Exception as e:
           self._sensor._logger.error(e)
           self._sensor._logger.error(traceback.format_exc())
