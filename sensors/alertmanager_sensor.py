@@ -22,7 +22,7 @@ class AlertmanagerSensor(Sensor):
 
       def do_POST(self):
         length = int(self.headers.getheader('content-length', 0))
-        s = urllib.unquote(self.rfile.read(length))
+        s = self.rfile.read(length)
         try:
           d = json.loads(s)
           labels = d['alerts'][0]['labels']
