@@ -25,14 +25,14 @@ class AlertmanagerSensor(Sensor):
         s = self.rfile.read(length)
         try:
           d = json.loads(s)
-          labels = d['alerts'][0]['labels']
-
-          trigger = 'prometheus.alert'
-          payload = {
-            'alert_name': labels['alertname'],
-            'host': labels['instance']
-          }
-          self._sensor.sensor_service.dispatch(trigger=trigger, payload=payload)
+          for alert in d['alerts']:
+            labels = alerts['labels']
+            trigger = 'prometheus.alert'
+            payload = {
+              'alert_name': labels['alertname'],
+              'host': labels['instance']
+            }
+            self._sensor.sensor_service.dispatch(trigger=trigger, payload=payload)
 
           self.send_response(200)
           self.send_header("Content-type", "application/json")
