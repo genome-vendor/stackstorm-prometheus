@@ -44,11 +44,15 @@ class AlertmanagerSensor(Sensor):
               self._sensor.sensor_service.dispatch(trigger=trigger, payload=payload)
 
           for alertname in hosts:
-            payload = {
-              'alert_name': alertname,
-              'host': ','.join(hosts[alertname])
-            }
-            self._sensor.sensor_service.dispatch(trigger=trigger, payload=payload)
+            while len(hosts[alertname]):
+              batch_size = 10
+              host_batch = hosts[alertname][0:batch_size]
+              del hosts[alertname][0:batch_size]
+              payload = {
+                'alert_name': alertname,
+                'host': ','.join(host_batch)
+              }
+              self._sensor.sensor_service.dispatch(trigger=trigger, payload=payload)
 
           self.send_response(200)
           self.send_header("Content-type", "application/json")
