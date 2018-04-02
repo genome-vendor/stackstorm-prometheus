@@ -39,7 +39,7 @@ class AlertmanagerSensor(Sensor):
               trigger = 'prometheus.alert'
               payload = {
                 'alert_name': labels['alertname'],
-                'host': labels['instance']
+                'host': labels['instance'],
               }
               self._sensor.sensor_service.dispatch(trigger=trigger, payload=payload)
 
@@ -50,7 +50,7 @@ class AlertmanagerSensor(Sensor):
               del hosts[alertname][0:batch_size]
               payload = {
                 'alert_name': alertname,
-                'host': ','.join(host_batch)
+                'host': ','.join(host_batch),
               }
               self._sensor.sensor_service.dispatch(trigger=trigger, payload=payload)
 
