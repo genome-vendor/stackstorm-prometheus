@@ -27,6 +27,8 @@ class AlertmanagerSensor(Sensor):
         try:
           d = json.loads(s)
 
+          self._sensor._logger.info(d)
+
           hosts = defaultdict(list)
           for alert in d['alerts']:
             labels = alerts['labels']
