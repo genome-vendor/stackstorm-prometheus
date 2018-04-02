@@ -55,7 +55,7 @@ class AlertmanagerSensor(Sensor):
                 'alert_name': alertname,
                 'host': ','.join(host_batch),
               }
-              self._sensor.sensor_service.dispatch(trigger=trigger, payload=payload)
+              self._sensor.sensor_service.dispatch(trigger='prometheus.alert', payload=payload)
 
           self.send_response(200)
           self.send_header("Content-type", "application/json")
