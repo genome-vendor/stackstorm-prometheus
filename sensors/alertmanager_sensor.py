@@ -31,8 +31,12 @@ class AlertmanagerSensor(Sensor):
           for alert in d['alerts']:
             labels = alerts['labels']
 
-            # FIXME: Test new payload strategy only on `network_mount_down_autofix` for the moment.
-            if labels['alertname'] == 'network_mount_down_autofix':
+            # FIXME: Test new payload strategy only on specific alerts.
+            alertnames_to_batch = [
+              'hpc_stale_mount_autofix',
+              'network_mount_down_autofix',
+            ]
+            if labels['alertname'] in alertnames_to_batch:
               hosts[labels['alertname']].append(labels['instance'])
             else:
               labels = alerts['labels']
