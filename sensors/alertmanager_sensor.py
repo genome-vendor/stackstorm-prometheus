@@ -39,7 +39,6 @@ class AlertmanagerSensor(Sensor):
             if labels['alertname'] in alertnames_to_batch:
               hosts[labels['alertname']].append(labels['instance'])
             else:
-              labels = alerts['labels']
               trigger = 'prometheus.alert'
               payload = {
                 'alert_name': labels['alertname'],
