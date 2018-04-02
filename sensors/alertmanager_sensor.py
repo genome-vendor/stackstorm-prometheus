@@ -1,3 +1,4 @@
+from collections import defaultdict
 from st2reactor.sensor.base import Sensor
 
 import BaseHTTPServer
@@ -25,12 +26,27 @@ class AlertmanagerSensor(Sensor):
         s = self.rfile.read(length)
         try:
           d = json.loads(s)
+
+          hosts = defaultdict(list)
           for alert in d['alerts']:
             labels = alerts['labels']
-            trigger = 'prometheus.alert'
+
+            # FIXME: Test new payload strategy only on `network_mount_down_autofix` for the moment.
+            if labels['alertname'] == 'network_mount_down_autofix':
+              hosts[labels['alertname']].append(labels['instance'])
+            else:
+              labels = alerts['labels']
+              trigger = 'prometheus.alert'
+              payload = {
+                'alert_name': labels['alertname'],
+                'host': labels['instance']
+              }
+              self._sensor.sensor_service.dispatch(trigger=trigger, payload=payload)
+
+          for alertname in hosts:
             payload = {
-              'alert_name': labels['alertname'],
-              'host': labels['instance']
+              'alert_name': alertname,
+              'host': ','.join(hosts[alertname])
             }
             self._sensor.sensor_service.dispatch(trigger=trigger, payload=payload)
 
